@@ -70,6 +70,7 @@ export const CspPolicies: PolicyMap = {
     "usrbg.is-hardly.online": ImageSrc, // USRBG API
     "icons.duckduckgo.com": ImageSrc, // DuckDuckGo Favicon API (Reverse Image Search)
     "betterdiscord.app": ImageSrc, // BetterDiscord theme store thumbnails
+    "*.supabase.co": ConnectSrc, // Starcord user list (StarcordUsers plugin)
 
     // Tenor & Giphy, used by GifProviderSwitcher plugin and some themes
     "*.tenor.com": ImageAndMediaSrc,

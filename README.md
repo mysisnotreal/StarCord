@@ -19,6 +19,7 @@ Everything from Equicord and Vencord, plus:
 - **DMVoiceView**: see which of your DMs are in a voice channel and click to view it
 - **FollowVoiceUserEnhanced**: follow a friend between voice channels, with notifications, and keep following them after a restart
 - **CursorBuddy feeding**: feed your cursor buddy hay or fish and watch it grow
+- **StarcordUsers**: every Starcord user gets a number and a badge, with a star next to their name in the member list, DMs and voice channels. Toggle any Discord badge from the badge button in the top right, which other Starcord users see too, and set a display name and username that only you see from the name button next to it
 
 Plugins made for Starcord live in `src/starcordplugins`, Equicord's in `src/equicordplugins` and Vencord's in `src/plugins`. Each plugin shows where it comes from in the plugin list.
 
@@ -78,7 +79,7 @@ Starcord has no built in updater. Download the newest installer and click **Patc
 
 ## Credits
 
-Starcord is built on [Equicord](https://github.com/Equicord/Equicord) and all of its contributors, which is a fork of [Vencord](https://github.com/Vendicated/Vencord) by [Vendicated](https://github.com/Vendicated). Thanks to [Suncord](https://github.com/verticalsync/Suncord) by [verticalsync](https://github.com/verticalsync) for helping Equicord, and to [hyyven](https://github.com/hyyven/Vencord-FakeDeafen) for the FakeDeafen plugin.
+Starcord is built on [Equicord](https://github.com/Equicord/Equicord) and all of its contributors, which is a fork of [Vencord](https://github.com/Vendicated/Vencord) by [Vendicated](https://github.com/Vendicated). Thanks to [Suncord](https://github.com/verticalsync/Suncord) by [verticalsync](https://github.com/verticalsync) for helping Equicord, to [hyyven](https://github.com/hyyven/Vencord-FakeDeafen) for the FakeDeafen plugin, and to [mezotv](https://github.com/mezotv/discord-badges) for the Discord badge images.
 
 ## License
 
