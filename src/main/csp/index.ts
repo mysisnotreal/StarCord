@@ -71,6 +71,7 @@ export const CspPolicies: PolicyMap = {
     "icons.duckduckgo.com": ImageSrc, // DuckDuckGo Favicon API (Reverse Image Search)
     "betterdiscord.app": ImageSrc, // BetterDiscord theme store thumbnails
     "*.supabase.co": ConnectSrc, // Starcord user list (StarcordUsers plugin)
+    "wss://*.supabase.co": ConnectSrc, // Starcord user list live updates
 
     // Tenor & Giphy, used by GifProviderSwitcher plugin and some themes
     "*.tenor.com": ImageAndMediaSrc,

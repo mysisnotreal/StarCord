@@ -16,7 +16,7 @@ import { User } from "@vencord/discord-types";
 import { Tooltip, UserStore } from "@webpack/common";
 import starcordIcon from "file://../../components/settings/tabs/vencord/starcord.png?base64";
 
-import { getStarcordUser, hasJoined, isConfigured, joinStarcord, logger, refreshUsers, useStarcordUser } from "./api";
+import { getStarcordUser, hasJoined, isConfigured, joinStarcord, logger, refreshUsers, startLiveUpdates, stopLiveUpdates, useStarcordUser } from "./api";
 import { BadgeMenuButton } from "./BadgeMenu";
 import { arrangeBadges, BadgesById } from "./badges";
 import { NameEditorButton } from "./NameEditor";
@@ -25,7 +25,8 @@ import { settings } from "./settings";
 
 const cl = classNameFactory("vc-starcord-users-");
 const STARCORD_ICON = `data:image/png;base64,${starcordIcon}`;
-const REFRESH_INTERVAL = 10 * 60_000;
+// a fallback for when live updates aren't available
+const REFRESH_INTERVAL = 2 * 60_000;
 
 let refreshInterval: ReturnType<typeof setInterval> | undefined;
 let askTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -183,7 +184,7 @@ export default definePlugin({
 
         if (!isConfigured()) return;
 
-        refreshUsers().catch(err => logger.error("Failed to load Starcord users", err));
+        startLiveUpdates();
         refreshInterval = setInterval(() => refreshUsers().catch(err => logger.error("Failed to load Starcord users", err)), REFRESH_INTERVAL);
 
         if (!settings.store.askedToJoin && !await hasJoined()) {
@@ -194,6 +195,7 @@ export default definePlugin({
 
     stop() {
         stopNicknames();
+        stopLiveUpdates();
         clearInterval(refreshInterval);
         clearTimeout(askTimeout);
         refreshInterval = askTimeout = undefined;

@@ -6,7 +6,7 @@
 
 import * as DataStore from "@api/DataStore";
 import { Logger } from "@utils/Logger";
-import { OAuth2AuthorizeModal, openModal, showToast, useEffect, UserStore, useState } from "@webpack/common";
+import { OAuth2AuthorizeModal, openModal, showToast, useEffect, UserProfileStore, UserStore, useState } from "@webpack/common";
 
 import { BadgesById } from "./badges";
 import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./config";
@@ -24,7 +24,11 @@ const MAX_USERS = 200_000;
 
 let users = new Map<string, StarcordUser>();
 const listeners = new Set<() => void>();
-const emitChange = () => listeners.forEach(listener => listener());
+function emitChange() {
+    listeners.forEach(listener => listener());
+    // redraws open profiles so new badges show up right away
+    UserProfileStore.emitChange();
+}
 
 export const isConfigured = () => /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(SUPABASE_URL) && SUPABASE_PUBLISHABLE_KEY.length > 0;
 const functionUrl = (path: string) => `${SUPABASE_URL}/functions/v1/starcord${path}`;
@@ -43,6 +47,12 @@ export function useStarcordUser(userId: string) {
     }, [userId]);
 
     return user;
+}
+
+function parseRow(row: any): [string, StarcordUser] | null {
+    if (typeof row?.user_id !== "string" || !/^\d{17,20}$/.test(row.user_id)) return null;
+    if (!Number.isSafeInteger(row.number) || row.number < 1) return null;
+    return [row.user_id, { number: row.number, badges: cleanBadges(row.badges) }];
 }
 
 function cleanBadges(badges: unknown) {
@@ -69,9 +79,8 @@ export async function refreshUsers() {
         if (!Array.isArray(rows)) throw new Error("Unexpected response while loading Starcord users");
 
         for (const row of rows) {
-            if (typeof row?.user_id !== "string" || !/^\d{17,20}$/.test(row.user_id)) continue;
-            if (!Number.isSafeInteger(row.number) || row.number < 1) continue;
-            next.set(row.user_id, { number: row.number, badges: cleanBadges(row.badges) });
+            const user = parseRow(row);
+            if (user) next.set(...user);
         }
 
         if (rows.length < PAGE_SIZE) break;
@@ -191,4 +200,83 @@ export async function leaveStarcord() {
     await setToken(userId, null);
     users.delete(userId);
     emitChange();
+}
+
+// Live updates through Supabase Realtime, so new users and badge changes show up instantly
+
+const REALTIME_TOPIC = "realtime:starcord-users";
+let socket: WebSocket | null = null;
+let heartbeatInterval: ReturnType<typeof setInterval> | undefined;
+let reconnectTimeout: ReturnType<typeof setTimeout> | undefined;
+let reconnectDelay = 5000;
+let liveRunning = false;
+
+const send = (message: Record<string, unknown>) => socket?.readyState === WebSocket.OPEN && socket.send(JSON.stringify(message));
+
+export function handleRealtimeMessage(message: any) {
+    if (message?.event === "system" && message.payload?.status === "error") {
+        logger.warn("Live updates are unavailable, the user list is reloaded every few minutes instead.", message.payload.message);
+        return;
+    }
+    if (message?.event !== "postgres_changes") return;
+
+    const change = message.payload?.data;
+    if ((change?.type ?? change?.eventType) === "DELETE") {
+        if (users.delete(change.old_record?.user_id)) emitChange();
+        return;
+    }
+
+    const user = parseRow(change?.record);
+    if (user) {
+        users.set(...user);
+        emitChange();
+    }
+}
+
+function connect() {
+    const url = `${SUPABASE_URL.replace(/^https:/, "wss:")}/realtime/v1/websocket?apikey=${encodeURIComponent(SUPABASE_PUBLISHABLE_KEY)}&vsn=1.0.0`;
+    socket = new WebSocket(url);
+
+    socket.onopen = () => {
+        reconnectDelay = 5000;
+        send({
+            topic: REALTIME_TOPIC,
+            event: "phx_join",
+            ref: "1",
+            join_ref: "1",
+            payload: { config: { postgres_changes: [{ event: "*", schema: "public", table: "starcord_users" }] } }
+        });
+        heartbeatInterval = setInterval(() => send({ topic: "phoenix", event: "heartbeat", ref: String(Date.now()), payload: {} }), 25_000);
+        // catches up on anything that changed while not connected
+        refreshUsers().catch(err => logger.error("Failed to load Starcord users", err));
+    };
+
+    socket.onmessage = event => {
+        try {
+            handleRealtimeMessage(JSON.parse(event.data));
+        } catch (err) {
+            logger.error("Invalid live update", err);
+        }
+    };
+
+    socket.onclose = () => {
+        clearInterval(heartbeatInterval);
+        if (!liveRunning) return;
+        reconnectTimeout = setTimeout(connect, reconnectDelay);
+        reconnectDelay = Math.min(reconnectDelay * 2, 60_000);
+    };
+}
+
+export function startLiveUpdates() {
+    if (!isConfigured() || liveRunning) return;
+    liveRunning = true;
+    connect();
+}
+
+export function stopLiveUpdates() {
+    liveRunning = false;
+    clearInterval(heartbeatInterval);
+    clearTimeout(reconnectTimeout);
+    socket?.close();
+    socket = null;
 }
