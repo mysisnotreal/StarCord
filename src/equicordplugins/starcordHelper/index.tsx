@@ -5,7 +5,7 @@
  */
 
 import { Settings } from "@api/Settings";
-import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
+import { Devs, GUILD_ID, StarcordDevs, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Alerts, NavigationRouter, UserStore } from "@webpack/common";
@@ -16,14 +16,14 @@ import { PluginCards } from "./pluginCards";
 let clicked = false;
 
 export default definePlugin({
-    name: "EquicordHelper",
+    name: "StarcordHelper",
     description: "Used to provide support and fix discord caused crashes.",
     tags: ["Utility"],
     dependencies: ["MessageAccessoriesAPI"],
     authors: [
         Devs.thororen,
-        EquicordDevs.nyx,
-        EquicordDevs.Naibuu,
+        StarcordDevs.nyx,
+        StarcordDevs.Naibuu,
     ],
     required: true,
     patches: [
@@ -106,8 +106,8 @@ export default definePlugin({
             if (VC_SUPPORT_CHANNEL_IDS.includes(channelId) && !clicked) {
                 return Alerts.show({
                     title: "Vencord Support Channel Warning",
-                    body: "Before asking for help. Check updates and if this issue is actually caused by Equicord!",
-                    confirmText: "Equicord Support",
+                    body: "Before asking for help. Check updates and if this issue is actually caused by Starcord!",
+                    confirmText: "Starcord Support",
                     onConfirm() {
                         NavigationRouter.transitionTo(`/channels/${GUILD_ID}/${SUPPORT_CHANNEL_ID}`);
                     },

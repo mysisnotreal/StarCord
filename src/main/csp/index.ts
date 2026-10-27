@@ -69,6 +69,7 @@ export const CspPolicies: PolicyMap = {
     "dearrow-thumb.ajay.app": ImageSrc, // Dearrow Thumbnail CDN
     "usrbg.is-hardly.online": ImageSrc, // USRBG API
     "icons.duckduckgo.com": ImageSrc, // DuckDuckGo Favicon API (Reverse Image Search)
+    "betterdiscord.app": ImageSrc, // BetterDiscord theme store thumbnails
 
     // Tenor & Giphy, used by GifProviderSwitcher plugin and some themes
     "*.tenor.com": ImageAndMediaSrc,
@@ -120,7 +121,7 @@ const patchCsp = (headers: PolicyMap) => {
         pushDirective("script-src", "'unsafe-inline'", "'unsafe-eval'");
 
         for (const directive of ["style-src", "connect-src", "img-src", "font-src", "media-src", "worker-src"]) {
-            pushDirective(directive, "blob:", "data:", "vencord:", "vesktop:", "equicord:", "equibop:");
+            pushDirective(directive, "blob:", "data:", "vencord:", "vesktop:", "starcord:", "equibop:");
         }
 
         for (const [host, directives] of Object.entries(NativeSettings.store.customCspRules)) {

@@ -19,6 +19,7 @@ export default function oneko(options = {}) {
         persistPosition = true,
         furColor = "#FFFFFF",
         outlineColor = "#000000",
+        onFrame,
     } = options;
 
     const nekoEl = document.createElement("div");
@@ -314,6 +315,7 @@ export default function oneko(options = {}) {
 
         if (distance < nekoSpeed || distance < 48) {
             idle();
+            onFrame?.(nekoPosX, nekoPosY, false);
             return;
         }
 
@@ -342,6 +344,7 @@ export default function oneko(options = {}) {
 
         nekoEl.style.left = `${nekoPosX - 16}px`;
         nekoEl.style.top = `${nekoPosY - 16}px`;
+        onFrame?.(nekoPosX, nekoPosY, true);
     }
 
     init();

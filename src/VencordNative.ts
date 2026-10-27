@@ -5,10 +5,10 @@
  */
 
 import type { Settings } from "@api/Settings";
+import type { BetterDiscordTheme } from "@main/betterDiscordThemes";
 import type { CspRequestResult } from "@main/csp/manager";
 import type { PluginIpcMappings } from "@main/ipcPlugins";
 import { UserThemeHeader } from "@main/themes";
-import { UpdateData } from "@main/updater";
 import { IpcEvents } from "@shared/IpcEvents";
 import type { IpcRes } from "@utils/types";
 import { ipcRenderer } from "electron/renderer";
@@ -44,13 +44,13 @@ export default {
         getSystemValues: () => invoke<Record<string, string>>(IpcEvents.GET_THEME_SYSTEM_VALUES),
 
         openFolder: () => invoke<void>(IpcEvents.OPEN_THEMES_FOLDER),
+
+        getBetterDiscordThemes: () => invoke<{ success: true; themes: BetterDiscordTheme[]; } | { success: false; error: string; }>(IpcEvents.GET_BETTERDISCORD_THEMES),
+        installBetterDiscordTheme: (id: number, name: string) => invoke<{ success: true; fileName: string; } | { success: false; error: string; }>(IpcEvents.INSTALL_BETTERDISCORD_THEME, id, name),
     },
 
     updater: {
         getRepo: () => invoke<IpcRes<string>>(IpcEvents.UPDATER_GET_REPO),
-        getUpdates: () => invoke<IpcRes<UpdateData[]>>(IpcEvents.UPDATER_LIST_UPDATES),
-        fetchUpdate: () => invoke<IpcRes<boolean>>(IpcEvents.UPDATER_FETCH_UPDATE),
-        applyUpdate: () => invoke<IpcRes<boolean>>(IpcEvents.UPDATER_APPLY_UPDATE),
     },
 
     settings: {

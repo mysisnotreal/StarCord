@@ -64,8 +64,8 @@ if (!IS_VANILLA && !IS_EXTENSION) {
             }
         });
 
-        protocol.handle("equicord", ({ url: unsafeUrl }) => {
-            let url = decodeURI(unsafeUrl).slice("equicord://".length).replace(/\?v=\d+$/, "");
+        protocol.handle("starcord", ({ url: unsafeUrl }) => {
+            let url = decodeURI(unsafeUrl).slice("starcord://".length).replace(/\?v=\d+$/, "");
 
             if (url.endsWith("/")) url = url.slice(0, -1);
 
@@ -101,8 +101,8 @@ if (!IS_VANILLA && !IS_EXTENSION) {
         try {
             if (RendererSettings.store.enableReactDevtools)
                 installExt("fmkadmapgofadopljbjfkapdkoienihi")
-                    .then(() => console.info("[Equicord] Installed React Developer Tools"))
-                    .catch(err => console.error("[Equicord] Failed to install React Developer Tools", err));
+                    .then(() => console.info("[Starcord] Installed React Developer Tools"))
+                    .catch(err => console.error("[Starcord] Failed to install React Developer Tools", err));
         } catch { }
 
         initCsp();

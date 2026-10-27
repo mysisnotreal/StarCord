@@ -13,6 +13,7 @@ import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import { Plugin } from "@utils/types";
 import { React, showToast } from "@webpack/common";
+import starcordIcon from "file://../../../../../installer/image.png?base64";
 
 import { PluginMeta } from "~plugins";
 
@@ -33,6 +34,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
     const settings = Settings.plugins[plugin.name];
     const pluginMeta = PluginMeta[plugin.name];
     const isEquicordPlugin = pluginMeta.folderName.startsWith("src/equicordplugins/") ?? false;
+    const isStarcordPlugin = pluginMeta.folderName.startsWith("src/starcordplugins/") ?? false;
     const isVencordPlugin = pluginMeta.folderName.startsWith("src/plugins/") ?? false;
     const isUserPlugin = pluginMeta?.userPlugin ?? false;
     const isModifiedPlugin = plugin.isModified ?? false;
@@ -93,6 +95,12 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             src: "https://equicord.org/assets/icons/equicord/modified.png",
             alt: "Modified",
             title: "Modified Vencord Plugin"
+        },
+        {
+            condition: isStarcordPlugin,
+            src: `data:image/png;base64,${starcordIcon}`,
+            alt: "Starcord",
+            title: "Starcord Plugin"
         },
         {
             condition: isEquicordPlugin,

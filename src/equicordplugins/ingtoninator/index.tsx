@@ -7,7 +7,7 @@
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
@@ -148,7 +148,7 @@ export default definePlugin({
     description: "Suffixes 'ington' to a random word in your message",
     dependencies: ["ChatInputButtonAPI"],
     tags: ["Fun"],
-    authors: [EquicordDevs.zyqunix, EquicordDevs.BioTomateDE],
+    authors: [StarcordDevs.zyqunix, StarcordDevs.BioTomateDE],
     settings,
     chatBarButton: {
         icon: disabledIcon,

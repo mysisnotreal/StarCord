@@ -11,7 +11,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { DoubleCheckmarkIcon } from "@components/Icons";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
@@ -154,7 +154,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeywordNotify",
-    authors: [EquicordDevs.camila314, EquicordDevs.x3rt, EquicordDevs.benjas333],
+    authors: [StarcordDevs.camila314, StarcordDevs.x3rt, StarcordDevs.benjas333],
     description: "Sends a notification if a given message matches certain keywords or regexes",
     settings,
     keywordTabId: KEYWORD_TAB_ID,

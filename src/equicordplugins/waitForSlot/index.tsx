@@ -8,7 +8,7 @@ import { playAudio } from "@api/AudioPlayer";
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { popNotice, showNotice } from "@api/Notices";
 import { definePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, StarcordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
@@ -65,7 +65,7 @@ export default definePlugin({
     name: "WaitForSlot",
     description: "Automatically join a full voice channel when a slot opens.",
     tags: ["Servers", "Utility", "Voice"],
-    authors: [EquicordDevs.omaw, Devs.prism],
+    authors: [StarcordDevs.omaw, Devs.prism],
     settings,
     patches: [
         {

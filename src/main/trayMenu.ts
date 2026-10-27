@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { gitHash } from "@shared/vencordUserAgent";
-import { app, BaseWindow, BrowserWindow, dialog, Menu, MenuItemConstructorOptions, shell } from "electron";
+import { gitHash, gitRemote } from "@shared/vencordUserAgent";
+import { BrowserWindow, Menu, MenuItemConstructorOptions, shell } from "electron";
 import aboutHtml from "file://about.html?minify";
 
-import updater from "./updater";
 import { SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
 
 function findInsertIndex(template: MenuItemConstructorOptions[]): number {
@@ -66,7 +65,8 @@ function openAboutWindow() {
 
     const aboutParams = aboutHtml
         .replaceAll("{{VERSION}}", VERSION)
-        .replaceAll("{{GIT_HASH}}", gitHash); // change to gitHashShort if/when its added
+        .replaceAll("{{GIT_HASH}}", gitHash) // change to gitHashShort if/when its added
+        .replaceAll("{{GIT_REMOTE}}", gitRemote);
     const base64Html = Buffer.from(aboutParams).toString("base64");
     aboutWindow.loadURL(`data:text/html;base64,${base64Html}`);
     aboutWindow.on("closed", () => {
@@ -74,41 +74,14 @@ function openAboutWindow() {
     });
 }
 
-const notify = (window: BaseWindow | undefined, title: string, message: string) =>
-    window && !window.isDestroyed()
-        ? dialog.showMessageBox(window, { title, message })
-        : dialog.showMessageBox({ title, message });
-
 function createVencordMenuItems(): MenuItemConstructorOptions[] {
     return [
         {
-            label: "Equicord",
+            label: "Starcord",
             submenu: [
                 {
-                    label: "About Equicord",
+                    label: "About Starcord",
                     click: () => openAboutWindow()
-                },
-                {
-                    label: "Update Equicord",
-                    async click(_item, window) {
-                        try {
-                            const updateAvailable = await updater.fetchUpdate();
-                            if (!updateAvailable) {
-                                return notify(window, "No Update Available", "You are already using the latest version of Equicord.");
-                            }
-
-                            const result = await updater.applyUpdate();
-                            if (!result) {
-                                return notify(window, "Update Failed", "Failed to apply the update for Equicord.");
-                            }
-
-                            await notify(window, "Update Successful", "Now relaunching Equicord to apply the update.");
-                            app.relaunch();
-                            app.exit();
-                        } catch (e) {
-                            notify(window, "Update Error", `An error occurred while updating Equicord.\n\n${String(e)}`);
-                        }
-                    }
                 },
                 { type: "separator" },
                 {
@@ -128,7 +101,7 @@ export function patchTrayMenu(): void {
     const originalBuildFromTemplate = Menu.buildFromTemplate;
 
     Menu.buildFromTemplate = function (template: MenuItemConstructorOptions[]) {
-        const alreadyPatched = template.some(item => item.label === "Equicord");
+        const alreadyPatched = template.some(item => item.label === "Starcord");
         if (isTrayMenu(template) && !alreadyPatched) {
             const insertIndex = findInsertIndex(template);
             const vencordItems = createVencordMenuItems();

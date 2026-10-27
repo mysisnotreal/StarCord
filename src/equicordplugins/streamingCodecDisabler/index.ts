@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { CodecInfo } from "@vencord/discord-types";
 
@@ -41,7 +41,7 @@ export default definePlugin({
     name: "StreamingCodecDisabler",
     description: "Disable video codecs of your choice for streaming and cameras.",
     tags: ["Utility", "Voice"],
-    authors: [EquicordDevs.davidkra230],
+    authors: [StarcordDevs.davidkra230],
     settings,
 
     patches: [

@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxDispatcher, MediaEngineStore } from "@webpack/common";
 
@@ -57,7 +57,7 @@ export default definePlugin({
     name: "ToggleVideoBind",
     description: "Adds a customizable bind to toggle webcam.",
     tags: ["Utility", "Voice"],
-    authors: [EquicordDevs.mochienya],
+    authors: [StarcordDevs.mochienya],
     settings,
     start() {
         document.addEventListener("keydown", handleKeydown);

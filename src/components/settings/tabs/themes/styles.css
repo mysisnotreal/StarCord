@@ -68,3 +68,40 @@
 .vc-settings-theme-footer-pin-icon svg path {
     fill: var(--text-muted);
 }
+
+.vc-settings-theme-bd-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.vc-settings-theme-bd-thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--background-mod-subtle);
+}
+
+.vc-settings-theme-bd-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+}
+
+.vc-settings-theme-bd-description {
+    display: -webkit-box;
+    flex: 1;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.vc-settings-theme-bd-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+}

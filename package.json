@@ -1,18 +1,10 @@
 {
-    "name": "equicord",
+    "name": "starcord",
     "private": "true",
     "version": "1.15.13.0",
     "description": "The other cutest Discord client mod",
-    "homepage": "https://github.com/Equicord/Equicord#readme",
-    "bugs": {
-        "url": "https://github.com/Equicord/Equicord/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Equicord/Equicord.git"
-    },
     "license": "GPL-3.0-or-later",
-    "author": "Equicord",
+    "author": "Starcord",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
@@ -26,6 +18,7 @@
         "generateDevsList": "tsx scripts/generateDevsList.ts",
         "generatePluginJson": "tsx scripts/generatePluginList.ts",
         "generateEquicordPluginJson": "tsx scripts/generatePluginList.ts --equicord",
+        "generateStarcordPluginJson": "tsx scripts/generatePluginList.ts --starcord",
         "generateVencordPluginJson": "tsx scripts/generatePluginList.ts --vencord",
         "generateTypes": "tspc --emitDeclarationOnly --declaration --outDir packages/vencord-types --allowJs false",
         "inject": "node scripts/runInstaller.mjs -- --install",

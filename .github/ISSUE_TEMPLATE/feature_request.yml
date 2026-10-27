@@ -1,5 +1,5 @@
 name: Feature Request
-description: Have an idea for a new feature? Request it here! No plugin requests, go to our Discord server for that
+description: Have an idea for a new feature? Request it here!
 labels: [enhancement]
 title: "[Feature] <title>"
 
@@ -7,9 +7,7 @@ body:
     - type: markdown
       attributes:
           value: |
-              This form is not for any of the following:
-              - Plugin requests - Go to our [Discord server](https://equicord.org/discord) for that
-              - Feature requests for plugins - Go to our [Discord server](https://equicord.org/discord) for that
+              If your request is for a plugin that also exists in [Equicord](https://github.com/Equicord/Equicord), consider requesting it upstream.
 
     - type: textarea
       id: feature-description

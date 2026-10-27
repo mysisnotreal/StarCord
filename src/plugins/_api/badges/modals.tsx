@@ -71,7 +71,7 @@ export function VencordDonorModal() {
     ));
 }
 
-export function EquicordDonorModal() {
+export function StarcordDonorModal() {
     openModal(props => (
         <ErrorBoundary noop onError={() => {
             props.onClose();
@@ -121,7 +121,7 @@ export function EquicordDonorModal() {
                 </div>
                 <div>
                     <Flex justifyContent="center" style={{ width: "100%" }}>
-                        <DonateButton equicord={true} />
+                        <DonateButton starcord={true} />
                     </Flex>
                 </div>
             </Modal>
@@ -129,7 +129,7 @@ export function EquicordDonorModal() {
     ));
 }
 
-export function EquicordTranslatorModal() {
+export function StarcordTranslatorModal() {
     openModal(props => (
         <ErrorBoundary noop onError={() => {
             props.onClose();

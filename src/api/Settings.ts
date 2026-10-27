@@ -40,9 +40,8 @@ export type SettingsPluginUiElements = {
 };
 
 export interface Settings {
-    autoUpdate: boolean;
-    autoUpdateNotification: boolean;
     useQuickCss: boolean;
+    optimizedDiscord: boolean;
     eagerPatches: boolean;
     enabledThemes: string[];
     enabledThemeLinks: string[];
@@ -93,19 +92,11 @@ export interface Settings {
         missed: boolean;
         logLimit: number;
     };
-
-    cloud: {
-        authenticated: boolean;
-        url: string;
-        settingsSync: boolean;
-        settingsSyncVersion: number;
-    };
 }
 
 const DefaultSettings: Settings = {
-    autoUpdate: true,
-    autoUpdateNotification: true,
     useQuickCss: true,
+    optimizedDiscord: false,
     themeLinks: [],
     eagerPatches: false, // Eagerly patching no longer works due to module factories with the same id being able to have different sources now.
     enabledThemes: [],
@@ -136,13 +127,6 @@ const DefaultSettings: Settings = {
         useNative: "not-focused",
         missed: true,
         logLimit: 50
-    },
-
-    cloud: {
-        authenticated: false,
-        url: "https://cloud.equicord.org/",
-        settingsSync: false,
-        settingsSyncVersion: 0
     },
 };
 
@@ -190,7 +174,6 @@ export const SettingsStore = new SettingsStoreClass(settings, {
 
 if (!IS_REPORTER) {
     SettingsStore.addGlobalChangeListener((_, path) => {
-        SettingsStore.plain.cloud.settingsSyncVersion = Date.now();
         VencordNative.settings.set(SettingsStore.plain, path);
     });
 }

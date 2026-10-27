@@ -23,6 +23,7 @@
 // Only import pure modules that don't import other parts of Vencord.
 import monacoHtmlLocal from "file://monacoWin.html?minify";
 import * as DataStore from "@api/DataStore";
+import { gitRemote } from "@shared/vencordUserAgent";
 import type { Settings } from "@api/Settings";
 import { getThemeInfo } from "@main/themes";
 import { debounce } from "@shared/debounce";
@@ -51,6 +52,9 @@ window.VencordNative = {
         getSystemValues: async () => ({}),
 
         openFolder: async () => Promise.reject("themes:openFolder is not supported on web"),
+
+        getBetterDiscordThemes: async () => ({ success: false as const, error: "Browsing BetterDiscord themes is only supported on desktop" }),
+        installBetterDiscordTheme: async () => ({ success: false as const, error: "Installing BetterDiscord themes is only supported on desktop" }),
     },
 
     native: {
@@ -71,10 +75,7 @@ window.VencordNative = {
     },
 
     updater: {
-        getRepo: async () => ({ ok: true, value: "https://github.com/Equicord/Equicord" }),
-        getUpdates: async () => ({ ok: true, value: [] }),
-        fetchUpdate: async () => ({ ok: true, value: false }),
-        applyUpdate: async () => ({ ok: true, value: true }),
+        getRepo: async () => ({ ok: true, value: `https://github.com/${gitRemote}` }),
     },
 
     quickCss: {
@@ -123,14 +124,14 @@ window.VencordNative = {
     settings: {
         get: () => {
             try {
-                const settings = JSON.parse(localStorage.getItem("EquicordSettings") || "{}");
+                const settings = JSON.parse(localStorage.getItem("StarcordSettings") || "{}");
                 return typeof settings === "string" ? JSON.parse(settings) : settings;
             } catch (e) {
                 console.error("Failed to parse settings from localStorage: ", e);
                 return {};
             }
         },
-        set: async (s: Settings) => localStorage.setItem("EquicordSettings", JSON.stringify(s)),
+        set: async (s: Settings) => localStorage.setItem("StarcordSettings", JSON.stringify(s)),
         getSettingsDir: async () => "LocalStorage",
         openFolder: async () => Promise.reject("settings:openFolder is not supported on web"),
     },

@@ -29,11 +29,9 @@ export const DISCORD_SETTINGS_ROUTES: SettingsRoute[] = [
     { route: "authorized_apps", label: "Authorized Apps", keywords: ["oauth", "apps"] },
     { route: "family_center", label: "Family Center", keywords: ["family", "safety"] },
     { route: "advanced", label: "Advanced", keywords: ["developer"] },
-    { route: "equicord_main", label: "Equicord", keywords: ["vencord"] },
-    { route: "equicord_plugins", label: "Equicord Plugins", keywords: ["plugins"] },
-    { route: "equicord_themes", label: "Equicord Themes", keywords: ["themes", "css"] },
-    { route: "equicord_updater", label: "Equicord Updater", keywords: ["update"] },
-    { route: "equicord_changelog", label: "Equicord Changelog", keywords: ["changelog", "news"] }
+    { route: "starcord_main", label: "Starcord", keywords: ["vencord"] },
+    { route: "starcord_plugins", label: "Starcord Plugins", keywords: ["plugins"] },
+    { route: "starcord_themes", label: "Starcord Themes", keywords: ["themes", "css"] }
 ];
 
 const ROUTE_ALIASES = new Map<string, string[]>([
@@ -52,11 +50,9 @@ const ROUTE_ALIASES = new Map<string, string[]>([
     ["chat", ["chat_panel"]],
     ["authorized_apps", ["authorized_apps_panel"]],
     ["family_center", ["family_center_panel"]],
-    ["equicord_main", ["equicord_main_panel"]],
-    ["equicord_plugins", ["equicord_plugins_panel"]],
-    ["equicord_themes", ["equicord_themes_panel"]],
-    ["equicord_updater", ["equicord_updater_panel"]],
-    ["equicord_changelog", ["equicord_changelog_panel"]]
+    ["starcord_main", ["starcord_main_panel"]],
+    ["starcord_plugins", ["starcord_plugins_panel"]],
+    ["starcord_themes", ["starcord_themes_panel"]]
 ]);
 
 const ROUTE_LOOKUP = (() => {

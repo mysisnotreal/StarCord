@@ -10,27 +10,27 @@ import { OptionType } from "@utils/types";
 import { useEffect, UserStore, useState } from "@webpack/common";
 
 const settings = definePluginSettings({
-    showEquicordDonor: {
+    showStarcordDonor: {
         type: OptionType.BOOLEAN,
-        description: "Enable to show Equicord Donor badges in chat.",
+        description: "Enable to show Starcord Donor badges in chat.",
         hidden: true,
         default: true
     },
-    EquicordDonorPosition: {
+    StarcordDonorPosition: {
         type: OptionType.NUMBER,
-        description: "The position of the Equicord Donor badges.",
+        description: "The position of the Starcord Donor badges.",
         hidden: true,
         default: 0
     },
-    showEquicordContributor: {
+    showStarcordContributor: {
         type: OptionType.BOOLEAN,
-        description: "Enable to show Equicord Contributor badges in chat.",
+        description: "Enable to show Starcord Contributor badges in chat.",
         hidden: true,
         default: true
     },
-    EquicordContributorPosition: {
+    StarcordContributorPosition: {
         type: OptionType.NUMBER,
-        description: "The position of the Equicord Contributor badge.",
+        description: "The position of the Starcord Contributor badge.",
         hidden: true,
         default: 1
     },
@@ -93,8 +93,8 @@ export default settings;
 
 const BadgeSettings = () => {
     const [images, setImages] = useState([
-        { src: "https://badge.equicord.org/donor.webp", shown: settings.store.showEquicordDonor, title: "Equicord donor badges", key: "EquicordDonor", position: settings.store.EquicordDonorPosition },
-        { src: "https://equicord.org/assets/favicon.png", shown: settings.store.showEquicordContributor, title: "Equicord contributor badge", key: "EquicordContributer", position: settings.store.EquicordContributorPosition },
+        { src: "https://badge.equicord.org/donor.webp", shown: settings.store.showStarcordDonor, title: "Starcord donor badges", key: "StarcordDonor", position: settings.store.StarcordDonorPosition },
+        { src: "https://equicord.org/assets/favicon.png", shown: settings.store.showStarcordContributor, title: "Starcord contributor badge", key: "StarcordContributer", position: settings.store.StarcordContributorPosition },
         { src: "https://cdn.discordapp.com/emojis/1026533070955872337.png", shown: settings.store.showVencordDonor, title: "Vencord donor badges", key: "VencordDonor", position: settings.store.VencordDonorPosition },
         { src: "https://cdn.discordapp.com/emojis/1092089799109775453.png", shown: settings.store.showVencordContributor, title: "Vencord contributor badge", key: "VencordContributer", position: settings.store.VencordContributorPosition },
         { src: "https://cdn.discordapp.com/badge-icons/bf01d1073931f921909045f3a39fd264.png", shown: settings.store.showDiscordProfile, title: "Discord profile badges (HypeSquad, Discord Staff, Early Supporter, etc.)", key: "DiscordProfile", position: settings.store.DiscordProfilePosition },
@@ -104,13 +104,13 @@ const BadgeSettings = () => {
     useEffect(() => {
         images.forEach(image => {
             switch (image.key) {
-                case "EquicordDonor":
-                    settings.store.EquicordDonorPosition = image.position;
-                    settings.store.showEquicordDonor = image.shown;
+                case "StarcordDonor":
+                    settings.store.StarcordDonorPosition = image.position;
+                    settings.store.showStarcordDonor = image.shown;
                     break;
-                case "EquicordContributer":
-                    settings.store.EquicordContributorPosition = image.position;
-                    settings.store.showEquicordContributor = image.shown;
+                case "StarcordContributer":
+                    settings.store.StarcordContributorPosition = image.position;
+                    settings.store.showStarcordContributor = image.shown;
                     break;
                 case "VencordDonor":
                     settings.store.VencordDonorPosition = image.position;

@@ -10,13 +10,13 @@ import { gitHashShort } from "@shared/vencordUserAgent";
 import { React } from "@webpack/common";
 import { JSX } from "react";
 
-import { ChromiumIcon, ClientIcon, DevBannerIcon, DiscordIcon, ElectronIcon, EquicordIcon, names, settings } from ".";
+import { ChromiumIcon, ClientIcon, DevBannerIcon, DiscordIcon, ElectronIcon, names, settings,StarcordIcon } from ".";
 
 export function makeDevBanner(state?: string): string | JSX.Element {
     const { RELEASE_CHANNEL, BUILD_NUMBER, VERSION_HASH } = window.GLOBAL_ENV;
     const buildChannel = names[RELEASE_CHANNEL] || RELEASE_CHANNEL.charAt(0).toUpperCase() + RELEASE_CHANNEL.slice(1);
     const { chromiumVersion, electronVersion, getVersionInfo } = SettingsPlugin;
-    const format = settings.store.format ?? "{devbannerIcon} {buildChannel} {buildNumber} ({buildHash}) | {equicordIcon} {equicordName} {equicordVersion} ({equicordHash})";
+    const format = settings.store.format ?? "{devbannerIcon} {buildChannel} {buildNumber} ({buildHash}) | {starcordIcon} {starcordName} {starcordVersion} ({starcordHash})";
     const baseFormat = state ?? format;
 
     const clientInfo = detectClient();
@@ -25,9 +25,9 @@ export function makeDevBanner(state?: string): string | JSX.Element {
         .replace(/{buildChannel}/g, buildChannel)
         .replace(/{buildNumber}/g, BUILD_NUMBER)
         .replace(/{buildHash}/g, VERSION_HASH.slice(0, 9))
-        .replace(/{equicordVersion}/g, VERSION)
-        .replace(/{equicordHash}/g, gitHashShort)
-        .replace(/{equicordPlatform}/g, getVersionInfo(false))
+        .replace(/{starcordVersion}/g, VERSION)
+        .replace(/{starcordHash}/g, gitHashShort)
+        .replace(/{starcordPlatform}/g, getVersionInfo(false))
         .replace(/{electronVersion}/g, electronVersion)
         .replace(/{chromiumVersion}/g, chromiumVersion)
         .replace(/{clientName}/g, clientInfo.name)
@@ -44,8 +44,8 @@ export function makeDevBanner(state?: string): string | JSX.Element {
         switch (part) {
             case "{discordIcon}":
                 return <span key={`icon-discord-${i}`} className="vc-discord-dev-banner-icons"><DiscordIcon /></span>;
-            case "{equicordIcon}":
-                return <span key={`icon-equicord-${i}`} className="vc-discord-dev-banner-icons"><EquicordIcon /></span>;
+            case "{starcordIcon}":
+                return <span key={`icon-starcord-${i}`} className="vc-discord-dev-banner-icons"><StarcordIcon /></span>;
             case "{electronIcon}":
                 return <span key={`icon-electron-${i}`} className="vc-discord-dev-banner-icons"><ElectronIcon /></span>;
             case "{chromiumIcon}":

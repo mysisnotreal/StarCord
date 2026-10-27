@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { showNotification } from "@api/Notifications";
 import { Settings } from "@api/Settings";
 import { gitHashShort } from "@shared/vencordUserAgent";
 import { copyToClipboard } from "@utils/clipboard";
 import { relaunch, showItemInFolder } from "@utils/native";
-import { checkForUpdates, getRepo } from "@utils/updater";
+import { getRepo } from "@utils/updater";
 import { GuildStore, NavigationRouter, SettingsRouter, showToast } from "@webpack/common";
 
 import gitRemote from "~git-remote";
@@ -26,16 +25,14 @@ export interface ButtonAction {
 }
 
 export const actions: ButtonAction[] = [
-    { id: "openEquicordSettings", label: "Open Equicord tab", callback: async () => await SettingsRouter.openUserSettings("equicord_main_panel"), registrar: "Equicord" },
-    { id: "openPluginSettings", label: "Open Plugin tab", callback: () => SettingsRouter.openUserSettings("equicord_plugins_panel"), registrar: "Equicord" },
-    { id: "openThemesSettings", label: "Open Themes tab", callback: () => SettingsRouter.openUserSettings("equicord_themes_panel"), registrar: "Equicord" },
-    { id: "openUpdaterSettings", label: "Open Updater tab", callback: () => SettingsRouter.openUserSettings("equicord_updater_panel"), registrar: "Equicord" },
-    { id: "openEquicordCloudSettings", label: "Open Cloud tab", callback: () => SettingsRouter.openUserSettings("equicord_cloud_panel"), registrar: "Equicord" },
-    { id: "openBackupSettings", label: "Open Backup & Restore tab", callback: () => SettingsRouter.openUserSettings("equicord_backup_restore_panel"), registrar: "Equicord" },
-    { id: "restartClient", label: "Restart Client", callback: () => relaunch(), registrar: "Equicord" },
-    { id: "openQuickCSSFile", label: "Open Quick CSS File", callback: () => VencordNative.quickCss.openEditor(), registrar: "Equicord" },
-    { id: "openSettingsFolder", label: "Open Settings Folder", callback: async () => showItemInFolder(await VencordNative.settings.getSettingsDir()), registrar: "Equicord" },
-    { id: "openInGithub", label: "Open in Github", callback: async () => VencordNative.native.openExternal(await getRepo()), registrar: "Equicord" },
+    { id: "openStarcordSettings", label: "Open Starcord tab", callback: async () => await SettingsRouter.openUserSettings("starcord_main_panel"), registrar: "Starcord" },
+    { id: "openPluginSettings", label: "Open Plugin tab", callback: () => SettingsRouter.openUserSettings("starcord_plugins_panel"), registrar: "Starcord" },
+    { id: "openThemesSettings", label: "Open Themes tab", callback: () => SettingsRouter.openUserSettings("starcord_themes_panel"), registrar: "Starcord" },
+    { id: "openBackupSettings", label: "Open Backup & Restore tab", callback: () => SettingsRouter.openUserSettings("starcord_backup_restore_panel"), registrar: "Starcord" },
+    { id: "restartClient", label: "Restart Client", callback: () => relaunch(), registrar: "Starcord" },
+    { id: "openQuickCSSFile", label: "Open Quick CSS File", callback: () => VencordNative.quickCss.openEditor(), registrar: "Starcord" },
+    { id: "openSettingsFolder", label: "Open Settings Folder", callback: async () => showItemInFolder(await VencordNative.settings.getSettingsDir()), registrar: "Starcord" },
+    { id: "openInGithub", label: "Open in Github", callback: async () => VencordNative.native.openExternal(await getRepo()), registrar: "Starcord" },
 
     {
         id: "openInBrowser", label: "Open in Browser", callback: async () => {
@@ -52,7 +49,7 @@ export const actions: ButtonAction[] = [
                     position: "bottom"
                 });
             }
-        }, registrar: "Equicord"
+        }, registrar: "Starcord"
     },
 
     {
@@ -77,7 +74,7 @@ export const actions: ButtonAction[] = [
             if (choice && enabled) {
                 return togglePlugin(choice, enabled.id === "enable");
             }
-        }, registrar: "Equicord"
+        }, registrar: "Starcord"
     },
 
     {
@@ -102,7 +99,7 @@ export const actions: ButtonAction[] = [
                     position: "bottom"
                 });
             }
-        }, registrar: "Equicord"
+        }, registrar: "Starcord"
     },
 
     {
@@ -114,30 +111,7 @@ export const actions: ButtonAction[] = [
                 variant: "success",
                 position: "bottom"
             });
-        }, registrar: "Equicord"
-    },
-
-    {
-        id: "checkForUpdates", label: "Check for Updates", callback: async () => {
-            const isOutdated = await checkForUpdates();
-
-            if (isOutdated) {
-                setTimeout(() => showNotification({
-                    title: "A Equicord update is available!",
-                    body: "Click here to view the update",
-                    permanent: true,
-                    noPersist: true,
-                    onClick() {
-                        SettingsRouter.openUserSettings("equicord_updater_panel");
-                    }
-                }), 10_000);
-            } else {
-                showToast({
-                    text: "No updates available",
-                    position: "bottom"
-                });
-            }
-        }, registrar: "Equicord"
+        }, registrar: "Starcord"
     },
 
     {
@@ -157,7 +131,7 @@ export const actions: ButtonAction[] = [
             if (choice) {
                 NavigationRouter.transitionToGuild(choice.id);
             }
-        }, registrar: "Equicord"
+        }, registrar: "Starcord"
     }
 ];
 

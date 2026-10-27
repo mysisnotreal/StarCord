@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, Settings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -50,14 +50,14 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "AlwaysAnimate",
-    description: "Animates anything that can be animated",
+    description: "Animates anything that can be animated. Does nothing while Optimized Discord is enabled.",
     tags: ["Appearance", "Fun"],
     authors: [Devs.FieryFlames],
     settings,
     patches: [
         {
             find: "canAnimate:",
-            predicate: () => settings.store.icons,
+            predicate: () => settings.store.icons && !Settings.optimizedDiscord,
             all: true,
             // Some modules match the find but the replacement is returned untouched
             noWarn: true,
@@ -73,7 +73,7 @@ export default definePlugin({
         {
             // Status emojis
             find: "#{intl::GUILD_OWNER}),children:",
-            predicate: () => settings.store.statusEmojis,
+            predicate: () => settings.store.statusEmojis && !Settings.optimizedDiscord,
             replacement: {
                 match: /(\.CUSTOM_STATUS.+?animateEmoji:)\i/,
                 replace: "$1!0"
@@ -82,7 +82,7 @@ export default definePlugin({
         {
             // Guild Banner
             find: "#{intl::DISCOVERABLE_GUILD_HEADER_PUBLIC_INFO}",
-            predicate: () => settings.store.serverBanners,
+            predicate: () => settings.store.serverBanners && !Settings.optimizedDiscord,
             replacement: {
                 match: /(guildBanner:\i,animate:)\i(?=}\):null)/,
                 replace: "$1!0"
@@ -91,6 +91,7 @@ export default definePlugin({
         {
             // Gradient roles in chat
             find: "=!1,contentOnly:",
+            predicate: () => !Settings.optimizedDiscord,
             replacement: {
                 match: /animate:\i/,
                 replace: "animate:!0"
@@ -99,6 +100,7 @@ export default definePlugin({
         {
             // Gradient roles in member list
             find: '="left",className:',
+            predicate: () => !Settings.optimizedDiscord,
             replacement: {
                 match: /,animateGradient:/,
                 replace: ",animateGradient:!0,_oldAnimateGradient:"
@@ -107,7 +109,7 @@ export default definePlugin({
         {
             // Nameplates
             find: ".MINI_PREVIEW,[",
-            predicate: () => settings.store.nameplates,
+            predicate: () => settings.store.nameplates && !Settings.optimizedDiscord,
             replacement: {
                 match: /animate:\i,loop:/,
                 replace: "animate:true,loop:true,_loop:"
@@ -116,7 +118,7 @@ export default definePlugin({
         {
             // Role Gradients
             find: "animateGradient:",
-            predicate: () => settings.store.roleGradients,
+            predicate: () => settings.store.roleGradients && !Settings.optimizedDiscord,
             all: true,
             noWarn: true,
             replacement: {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
 
@@ -16,7 +16,7 @@ export default definePlugin({
     name: "ZipPreview",
     description: "Previews ZIP contents inside file attachments.",
     tags: ["Chat", "Utility"],
-    authors: [EquicordDevs.justjxke],
+    authors: [StarcordDevs.justjxke],
     managedStyle,
 
     patches: [

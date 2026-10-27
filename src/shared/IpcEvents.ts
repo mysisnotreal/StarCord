@@ -33,10 +33,7 @@ export const enum IpcEvents {
     THEME_UPDATE = "VencordThemeUpdate",
     OPEN_EXTERNAL = "VencordOpenExternal",
 
-    UPDATER_LIST_UPDATES = "VencordListUpdates",
     UPDATER_GET_REPO = "VencordGetRepo",
-    UPDATER_FETCH_UPDATE = "VencordFetchUpdate",
-    UPDATER_APPLY_UPDATE = "VencordApplyUpdate",
 
     OPEN_MONACO_EDITOR = "VencordOpenMonacoEditor",
     GET_MONACO_THEME = "VencordGetMonacoTheme",
@@ -48,6 +45,8 @@ export const enum IpcEvents {
     CSP_REQUEST_ADD_OVERRIDE = "VencordCspRequestAddOverride",
 
     OPEN_THEMES_FOLDER = "VencordOpenThemesFolder",
+    GET_BETTERDISCORD_THEMES = "StarcordGetBetterDiscordThemes",
+    INSTALL_BETTERDISCORD_THEME = "StarcordInstallBetterDiscordTheme",
     OPEN_SETTINGS_FOLDER = "VencordOpenSettingsFolder",
     GET_RENDERER_CSS = "VencordGetRendererCss",
     RENDERER_CSS_UPDATE = "VencordRendererCssUpdate",

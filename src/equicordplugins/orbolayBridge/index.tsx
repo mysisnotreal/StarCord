@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { SoundboardSound } from "@vencord/discord-types";
 import { ChannelStore, FluxDispatcher, GuildMemberStore, showToast, SoundboardStore, StreamerModeStore, UserStore, VoiceStateStore } from "@webpack/common";
@@ -343,7 +343,7 @@ export default definePlugin({
     name: "OrbolayBridge",
     description: "Bridge plugin to connect Orbolay to Discord",
     tags: ["Utility", "Voice"],
-    authors: [EquicordDevs.SpikeHD],
+    authors: [StarcordDevs.SpikeHD],
     settings,
     flux: {
         SPEAKING: handleSpeaking,

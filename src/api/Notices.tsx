@@ -35,15 +35,20 @@ export function nextNotice() {
     currentNotice = noticesQueue.shift();
 
     if (currentNotice) {
-        NoticesModule.show(...currentNotice, "EquicordNotice");
+        NoticesModule.show(...currentNotice, "StarcordNotice");
     }
 }
 
-export function showNotice(message: ReactNode, buttonText: string, onOkClick: () => void) {
+export type NoticeType = "GENERIC" | "LAUNCH_GAME_FAILURE";
+
+/**
+ * @param type "GENERIC" renders Discord's default blue notice, "LAUNCH_GAME_FAILURE" renders the same notice in red
+ */
+export function showNotice(message: ReactNode, buttonText: string, onOkClick: () => void, type: NoticeType = "GENERIC") {
     const notice = isPrimitiveReactNode(message)
         ? message
         : <ErrorBoundary fallback={() => "Error Showing Notice"}>{message}</ErrorBoundary>;
 
-    noticesQueue.push(["GENERIC", notice, buttonText, onOkClick]);
+    noticesQueue.push([type, notice, buttonText, onOkClick]);
     if (!currentNotice) nextNotice();
 }

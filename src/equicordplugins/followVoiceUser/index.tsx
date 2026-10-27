@@ -7,7 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Notice } from "@components/Notice";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User, VoiceState } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
@@ -25,6 +25,22 @@ interface UserContextProps {
 }
 
 let followedUserInfo: TFollowedUserInfo = null;
+
+const followListeners = new Set<(userId: string | null) => void>();
+
+export const getFollowedUserId = () => followedUserInfo?.userId ?? null;
+
+export function setFollowedUser(userId: string | null) {
+    followedUserInfo = userId
+        ? { lastChannelId: UserStore.getCurrentUser().id, userId }
+        : null;
+    followListeners.forEach(listener => listener(userId));
+}
+
+export function addFollowListener(listener: (userId: string | null) => void) {
+    followListeners.add(listener);
+    return () => void followListeners.delete(listener);
+}
 
 const voiceChannelAction = findByPropsLazy("selectVoiceChannel");
 
@@ -53,17 +69,9 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
             label="Follow User"
             checked={checked}
             action={() => {
-                if (followedUserInfo?.userId === user.id) {
-                    followedUserInfo = null;
-                    setChecked(false);
-                    return;
-                }
-
-                followedUserInfo = {
-                    lastChannelId: UserStore.getCurrentUser().id,
-                    userId: user.id
-                };
-                setChecked(true);
+                const following = followedUserInfo?.userId === user.id;
+                setFollowedUser(following ? null : user.id);
+                setChecked(!following);
             }}
         ></Menu.MenuCheckboxItem>
     );
@@ -73,7 +81,7 @@ export default definePlugin({
     name: "FollowVoiceUser",
     description: "Follow a friend in voice chat.",
     tags: ["Voice"],
-    authors: [EquicordDevs.TheArmagan],
+    authors: [StarcordDevs.TheArmagan],
     settings,
     settingsAboutComponent: () => (
         <Notice.Info>

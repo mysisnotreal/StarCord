@@ -62,7 +62,7 @@ async function saveTar(patched: boolean) {
     const { buildNumber, builtAt } = getBuildNumber();
     const mtime = (builtAt.getTime() / 1000) | 0;
 
-    const root = patched ? `equicord-${buildNumber}` : `discord-${buildNumber}`;
+    const root = patched ? `starcord-${buildNumber}` : `discord-${buildNumber}`;
 
     for (const [id, module] of Object.entries(wreq.m)) {
         const patchedSrc = Function.toString.call(module);

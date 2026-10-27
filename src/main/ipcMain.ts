@@ -29,6 +29,7 @@ import { open, readdir, readFile, unlink } from "fs/promises";
 import { release } from "os";
 import { join } from "path";
 
+import { getBetterDiscordThemes, installBetterDiscordTheme } from "./betterDiscordThemes";
 import { registerCspIpcHandlers } from "./csp/manager";
 import { getThemeInfo, stripBOM, UserThemeHeader } from "./themes";
 import { ALLOWED_PROTOCOLS, QUICK_CSS_PATH, SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
@@ -109,6 +110,13 @@ ipcMain.handle(IpcEvents.GET_THEME_SYSTEM_VALUES, () => {
 });
 
 ipcMain.handle(IpcEvents.OPEN_THEMES_FOLDER, () => shell.openPath(THEMES_DIR));
+
+ipcMain.handle(IpcEvents.GET_BETTERDISCORD_THEMES, () =>
+    getBetterDiscordThemes()
+        .then(themes => ({ success: true, themes }))
+        .catch(() => ({ success: false, error: "Failed to load themes from the BetterDiscord theme store." }))
+);
+ipcMain.handle(IpcEvents.INSTALL_BETTERDISCORD_THEME, (_, id: unknown, name: unknown) => installBetterDiscordTheme(id, name));
 ipcMain.handle(IpcEvents.OPEN_SETTINGS_FOLDER, () => shell.openPath(SETTINGS_DIR));
 
 let fsWatchers = [] as FSWatcher[];
@@ -160,7 +168,7 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
     }
 
     monacoWin = new BrowserWindow({
-        title: "Equicord QuickCSS Editor",
+        title: "Starcord QuickCSS Editor",
         autoHideMenuBar: true,
         darkTheme: true,
         backgroundColor: nativeTheme.shouldUseDarkColors ? "#1e1e1e" : "white",

@@ -6,11 +6,11 @@
 
 import "./styles.css";
 
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
-    authors: [EquicordDevs.cassie, EquicordDevs.mochienya, EquicordDevs.secp192k1],
+    authors: [StarcordDevs.cassie, StarcordDevs.mochienya, StarcordDevs.secp192k1],
     name: "RichMagnetLinks",
     description: "Renders magnet links like message links",
     tags: ["Appearance", "Chat"],

@@ -1,3 +1,3 @@
 # NewPluginsManager
 
-Utility that notifies you when new plugins are added to Equicord
+Utility that notifies you when new plugins are added to Starcord

@@ -17,25 +17,28 @@
 */
 
 import { readdirSync, writeFileSync } from "fs";
-import { getEntryPoint, isPluginFile, parseDevs, parseEquicordDevs, parseFile, PluginData } from "./utils";
+import { getEntryPoint, isPluginFile, parseDevs, parseStarcordDevs, parseFile, PluginData } from "./utils";
 
 (async () => {
     parseDevs();
-    parseEquicordDevs();
+    parseStarcordDevs();
 
     const args = process.argv.slice(2);
 
     const equicordFlag = args.includes("--equicord");
+    const starcordFlag = args.includes("--starcord");
     const vencordFlag = args.includes("--vencord");
 
     let dirs: string[];
 
     if (equicordFlag) {
         dirs = ["src/equicordplugins/_core", "src/equicordplugins"];
+    } else if (starcordFlag) {
+        dirs = ["src/starcordplugins"];
     } else if (vencordFlag) {
         dirs = ["src/plugins", "src/plugins/_core"];
     } else {
-        dirs = ["src/plugins", "src/plugins/_core", "src/equicordplugins/_core", "src/equicordplugins"];
+        dirs = ["src/plugins", "src/plugins/_core", "src/equicordplugins/_core", "src/equicordplugins", "src/starcordplugins"];
     }
 
     const outputPath = args.find(a => !a.startsWith("--")) ?? null;

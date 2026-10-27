@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { CloudDownloadIcon } from "@components/Icons";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { pluralize } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
@@ -80,7 +80,7 @@ export default definePlugin({
     name: "DownloadAllAttachments",
     description: "Adds a popover button to download all attachments in a message at once.",
     tags: ["Utility", "Chat"],
-    authors: [EquicordDevs.dhopcs],
+    authors: [StarcordDevs.dhopcs],
     dependencies: ["MessagePopoverAPI"],
     settings,
     messagePopoverButton: {

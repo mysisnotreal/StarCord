@@ -25,20 +25,16 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
-import { openSettingsTabModal, UpdaterTab } from "@components/settings";
-import { platformName } from "@equicordplugins/equicordHelper/utils";
+import { platformName } from "@equicordplugins/starcordHelper/utils";
 import customIdle from "@plugins/customIdle";
-import { gitHash, gitHashShort } from "@shared/vencordUserAgent";
-import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, EQUICORD_TEAM, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_CONTRIB_ROLE_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID, VC_REGULAR_ROLE_ID, VENCORD_CONTRIB_ROLE_ID } from "@utils/constants";
+import { gitHash, gitHashShort, gitRemote } from "@shared/vencordUserAgent";
+import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, GUILD_ID, STARCORD_TEAM, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_CONTRIB_ROLE_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID, VC_REGULAR_ROLE_ID, VENCORD_CONTRIB_ROLE_ID } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
-import { isAnyPluginDev, isEquicordGuild, isEquicordSupport, isSupportChannel, tryOrElse } from "@utils/misc";
-import { relaunch } from "@utils/native";
-import { onlyOnce } from "@utils/onlyOnce";
+import { isAnyPluginDev, isStarcordGuild, isStarcordSupport, isSupportChannel, tryOrElse } from "@utils/misc";
 import { makeCodeblock } from "@utils/text";
 import definePlugin from "@utils/types";
-import { checkForUpdates, isOutdated, update } from "@utils/updater";
 import { RenderModalProps } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
 import { Alerts, ChannelStore, CloudUploader, ConfirmModal, Constants, GuildMemberStore, openModal, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Text, UserStore } from "@webpack/common";
@@ -52,9 +48,9 @@ const TrustedRolesIds = [
     VC_CONTRIB_ROLE_ID, // Vencord Contributor
     VC_REGULAR_ROLE_ID, // Vencord Regular
     VC_DONOR_ROLE_ID, // Vencord Donor
-    EQUICORD_TEAM, // Equicord Team
-    DONOR_ROLE_ID, // Equicord Donor
-    CONTRIB_ROLE_ID, // Equicord Contributor
+    STARCORD_TEAM, // Starcord Team
+    DONOR_ROLE_ID, // Starcord Donor
+    CONTRIB_ROLE_ID, // Starcord Contributor
     VENCORD_CONTRIB_ROLE_ID, // Vencord Contributor
 ];
 
@@ -69,16 +65,6 @@ interface clientData {
     shortHash?: string | null | undefined;
     hash?: string | null | undefined;
     dev?: boolean | null | undefined;
-}
-
-async function forceUpdate() {
-    const outdated = await checkForUpdates();
-    if (outdated) {
-        await update();
-        relaunch();
-    }
-
-    return outdated;
 }
 
 export function detectClient(): clientData {
@@ -140,8 +126,8 @@ async function generateDebugInfoMessage() {
         : platformName();
 
     const info = {
-        Equicord:
-            `v${VERSION} • [${gitHashShort}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
+        Starcord:
+            `v${VERSION} • [${gitHashShort}](<https://github.com/${gitRemote}/commit/${gitHash}>)` +
             `${IS_EQUIBOP ? "" : SettingsPlugin.getVersionInfo()} - ${Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${clientString}`,
         Platform: platformDisplay
@@ -166,7 +152,7 @@ async function generateDebugInfoMessage() {
     const commonIssues = {
         "Activity Sharing Disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
         "Link Embeds Disabled": tryOrElse(() => !ShowEmbeds.getSetting(), false),
-        "Equicord DevBuild": !IS_STANDALONE,
+        "Starcord DevBuild": !IS_STANDALONE,
         "Equibop DevBuild": IS_EQUIBOP && tryOrElse(() => VesktopNative.app.isDevBuild?.(), false),
         "Platform Spoofed": spoofInfo?.spoofed ?? false,
         "Has UserPlugins": Object.values(PluginMeta).some(m => m.userPlugin),
@@ -274,8 +260,6 @@ function generatePluginList() {
     return content;
 }
 
-const checkForUpdatesOnce = onlyOnce(checkForUpdates);
-
 const settings = definePluginSettings({}).withPrivateSettings<{
     dismissedDevBuildWarning?: boolean;
 }>();
@@ -295,7 +279,7 @@ function DevBuildConfirmModal(props: RenderModalProps) {
             }}
         >
             <div>
-                <Paragraph>You are using a custom build of Equicord, which we do not provide support for!</Paragraph>
+                <Paragraph>You are using a custom build of Starcord, which we do not provide support for!</Paragraph>
 
                 <Paragraph className={Margins.top8}>
                     We only provide support for <Link href="https://equicord.org/download">official builds</Link>.
@@ -328,17 +312,17 @@ export default definePlugin({
 
     commands: [
         {
-            name: "equicord-debug",
-            description: "Send Equicord debug info",
+            name: "starcord-debug",
+            description: "Send Starcord debug info",
             // @ts-ignore
-            predicate: ctx => isAnyPluginDev(UserStore.getCurrentUser()?.id) || isEquicordGuild(ctx?.guild?.id, true),
+            predicate: ctx => isAnyPluginDev(UserStore.getCurrentUser()?.id) || isStarcordGuild(ctx?.guild?.id, true),
             execute: async () => ({ content: await generateDebugInfoMessage() })
         },
         {
-            name: "equicord-plugins",
-            description: "Send Equicord plugin list",
+            name: "starcord-plugins",
+            description: "Send Starcord plugin list",
             // @ts-ignore
-            predicate: ctx => isAnyPluginDev(UserStore.getCurrentUser()?.id) || isEquicordGuild(ctx?.guild?.id, true),
+            predicate: ctx => isAnyPluginDev(UserStore.getCurrentUser()?.id) || isStarcordGuild(ctx?.guild?.id, true),
             execute: async () => {
                 const channelId = SelectedChannelStore.getChannelId();
                 const pluginList = generatePluginList();
@@ -367,57 +351,8 @@ export default definePlugin({
             const selfId = UserStore.getCurrentUser()?.id;
             if (!selfId || isAnyPluginDev(selfId)) return;
 
-            if (!IS_UPDATER_DISABLED) {
-                await checkForUpdatesOnce().catch(() => { });
-
-                if (isOutdated) {
-                    openModal(props => (
-                        <ConfirmModal
-                            {...props}
-                            variant="primary"
-                            title="Hold on!"
-                            confirmText="Update & Restart Now"
-                            cancelText="View Updates"
-                            onConfirm={forceUpdate}
-                            onCancel={() => openSettingsTabModal(UpdaterTab!)}
-                        >
-                            <div>
-                                <Paragraph>You are using an outdated version of Equicord! Chances are, your issue is already fixed.</Paragraph>
-                                <Paragraph className={Margins.top8}>
-                                    Please first update before asking for support!
-                                </Paragraph>
-                                <Paragraph className={Margins.top8}>
-                                    If you know what you're doing or cannot update, you can dismiss this prompt.
-                                </Paragraph>
-                            </div>
-                        </ConfirmModal>
-                    ));
-                    return;
-                }
-            }
-
             const roles = GuildMemberStore.getSelfMember(VC_GUILD_ID)?.roles || GuildMemberStore.getSelfMember(GUILD_ID)?.roles;
             if (!roles || TrustedRolesIds.some(id => roles.includes(id))) return;
-
-            if (!IS_WEB && IS_UPDATER_DISABLED) {
-                openModal(props => (
-                    <ConfirmModal
-                        {...props}
-                        title="Hold on!"
-                        confirmText="OK"
-                        variant="primary"
-                    >
-                        <div>
-                            <Paragraph>You are using an externally updated Equicord version, which we do not provide support for!</Paragraph>
-                            <Paragraph className={Margins.top8}>
-                                Please either switch to an <Link href="https://equicord.org/download">officially supported version of Equicord</Link>, or
-                                contact your package maintainer for support instead.
-                            </Paragraph>
-                        </div>
-                    </ConfirmModal>
-                ));
-                return;
-            }
 
             if (!IS_STANDALONE && !settings.store.dismissedDevBuildWarning) {
                 openModal(props => <DevBuildConfirmModal {...props} />);
@@ -431,44 +366,17 @@ export default definePlugin({
 
         const buttons = [] as JSX.Element[];
 
-        const equicordSupport = isEquicordGuild(props.message.channel_id) && isEquicordSupport(props.message.author.id);
+        const starcordSupport = isStarcordGuild(props.message.channel_id) && isStarcordSupport(props.message.author.id);
 
-        const shouldAddUpdateButton =
-            !IS_UPDATER_DISABLED
-            && ((isSupportChannel(props.channel.id) && equicordSupport))
-            && props.message.content?.toLowerCase().includes("update");
-
-        if (shouldAddUpdateButton) {
-            buttons.push(
-                <Button
-                    key="vc-update"
-                    variant="positive"
-                    onClick={async () => {
-                        try {
-                            if (await forceUpdate())
-                                showToast({ text: "Success! Restarting...", variant: "success" });
-                            else
-                                showToast({ text: "Already up to date!" });
-                        } catch (e) {
-                            new Logger(this.name).error("Error while updating:", e);
-                            showToast({ text: "Failed to update :(", variant: "critical" });
-                        }
-                    }}
-                >
-                    Update Now
-                </Button>
-            );
-        }
-
-        if (equicordSupport && isSupportChannel(props.channel.id) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel)) {
-            if (props.message.content.includes("/equicord-debug") || props.message.content.includes("/equicord-plugins")) {
+        if (starcordSupport && isSupportChannel(props.channel.id) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel)) {
+            if (props.message.content.includes("/starcord-debug") || props.message.content.includes("/starcord-plugins")) {
                 buttons.push(
                     <Button
                         key="vc-dbg"
                         variant="secondary"
                         onClick={async () => sendMessage(props.channel.id, { content: await generateDebugInfoMessage() })}
                     >
-                        Run /equicord-debug
+                        Run /starcord-debug
                     </Button>,
                     <Button
                         key="vc-plg-list"
@@ -488,7 +396,7 @@ export default definePlugin({
                             }
                         }}
                     >
-                        Run /equicord-plugins
+                        Run /starcord-plugins
                     </Button>
                 );
             }
@@ -506,7 +414,7 @@ export default definePlugin({
 
         return (
             <Card variant="warning" className={Margins.top8} defaultPadding>
-                Please do not private message Equicord & Vencord plugin developers for support!
+                Please do not private message Starcord & Vencord plugin developers for support!
                 <br />
                 Instead, use the support channel: {Parser.parse("https://discord.com/channels/1173279886065029291/1297590739911573585")}
                 {!ChannelStore.getChannel(SUPPORT_CHANNEL_ID) && " (Click the link to join)"}

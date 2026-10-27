@@ -103,7 +103,8 @@ export default function fathorse(cfg) {
 
         const speed = isRoaming ? Math.min(config.speed, freeroamSpeed) : config.speed;
 
-        if (dist >= Math.max(speed, config.size * 0.7)) {
+        const walking = dist >= Math.max(speed, config.size * 0.7);
+        if (walking) {
             animationFrame++;
 
             if (isRoaming) nextMove = Date.now() + freeroamInterval;
@@ -135,6 +136,8 @@ export default function fathorse(cfg) {
         } else {
             fathorse.style.opacity = "";
         }
+
+        cfg.onFrame?.(horsePos.x, horsePos.y, walking);
     }
 
     fathorse.id = "fathorse";

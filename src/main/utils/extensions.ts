@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { VENCORD_USER_AGENT_HASHLESS } from "@shared/vencordUserAgent";
 import { session } from "electron";
 import { unzip } from "fflate";
 import { constants as fsConstants } from "fs";
@@ -83,7 +84,7 @@ export async function installExt(id: string) {
 
         const buf = await fetchBuffer(url, {
             headers: {
-                "User-Agent": `Electron ${process.versions.electron} ~ Equicord (https://github.com/Equicord/Equicord)`
+                "User-Agent": `Electron ${process.versions.electron} ~ ${VENCORD_USER_AGENT_HASHLESS}`
             }
         });
 

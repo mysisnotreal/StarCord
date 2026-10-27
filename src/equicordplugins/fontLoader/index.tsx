@@ -14,7 +14,7 @@ import { Card } from "@components/Card";
 import { HeadingSecondary, HeadingTertiary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import { createAndAppendStyle } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
@@ -202,7 +202,7 @@ export default definePlugin({
     name: "FontLoader",
     description: "Loads any font from Google Fonts",
     tags: ["Appearance", "Customisation"],
-    authors: [EquicordDevs.vmohammad],
+    authors: [StarcordDevs.vmohammad],
     settings,
 
     start() {

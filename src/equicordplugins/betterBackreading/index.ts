@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelMessages } from "@vencord/discord-types";
 
@@ -96,7 +96,7 @@ function getCustomMessageCount() {
 export default definePlugin({
     name: "BetterBackreading",
     description: "Improve backreading with earlier message loading and less rubberbanding.",
-    authors: [EquicordDevs.Etorix],
+    authors: [StarcordDevs.Etorix],
     tags: ["Chat", "Utility"],
     settings,
     scrollManagers,

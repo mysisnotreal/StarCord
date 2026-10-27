@@ -28,15 +28,34 @@ import { Margins } from "@utils/margins";
 import { isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
 import { promptToRestart } from "@utils/promptToRestart";
-import { GuildMemberStore, React, useMemo, UserStore } from "@webpack/common";
+import { GuildMemberStore, React, UserStore } from "@webpack/common";
+import starcordIcon from "file://starcord.png?base64";
 
-import { DonateButtonComponent } from "./DonateButton";
+import { InviteButtonComponent } from "./DonateButton";
 import { MacOSVibrancySettings } from "./MacVibrancySettings";
 import { NotificationSection } from "./NotificationSettings";
 import { WindowsMaterialSettings } from "./WindowsMaterialSettings";
 
-const DEFAULT_DONATE_IMAGE = "https://cdn.discordapp.com/emojis/1026533090627174460.png";
-const SHIGGY_DONATE_IMAGE = "https://equicord.org/assets/favicon.png";
+const STARCORD_IMAGE = `data:image/png;base64,${starcordIcon}`;
+
+function starPolygon(x: number, y: number, size: number) {
+    const points = Array.from({ length: 10 }, (_, i) => {
+        const radius = i % 2 ? size * 0.45 : size;
+        const angle = (Math.PI / 5) * i - Math.PI / 2;
+        return `${(x + radius * Math.cos(angle)).toFixed(1)},${(y + radius * Math.sin(angle)).toFixed(1)}`;
+    });
+    return `<polygon points="${points.join(" ")}"/>`;
+}
+
+const STARS: [x: number, y: number, size: number][] = [
+    [30, 28, 9], [95, 160, 6], [150, 60, 5], [205, 175, 8], [250, 25, 6], [300, 110, 4],
+    [345, 165, 7], [390, 40, 9], [430, 125, 5], [470, 185, 6], [500, 70, 7], [545, 140, 9],
+    [575, 30, 5], [120, 105, 4], [20, 120, 6], [270, 70, 3], [420, 90, 3], [590, 190, 4]
+];
+
+const STAR_BACKGROUND = "data:image/svg+xml," + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice"><g fill="#ffd84d">${STARS.map(([x, y, size]) => starPolygon(x, y, size)).join("")}</g></svg>`
+);
 
 const VENNIE_DONATOR_IMAGE = "https://cdn.discordapp.com/emojis/1238120638020063377.png";
 const COZY_CONTRIB_IMAGE = "https://cdn.discordapp.com/emojis/1026533070955872337.png";
@@ -51,7 +70,7 @@ type KeysOfType<Object, Type> = {
 }[keyof Object];
 
 function Switches() {
-    const settings = useSettings(["useQuickCss", "enableReactDevtools", "mainWindowFrameless", "frameless", "nativeTitleBar", "transparent", "winCtrlQ", "disableMinSize"]);
+    const settings = useSettings(["useQuickCss", "optimizedDiscord", "enableReactDevtools", "mainWindowFrameless", "frameless", "nativeTitleBar", "transparent", "winCtrlQ", "disableMinSize"]);
     const { disableAnalytics } = NoTrack.settings.use(["disableAnalytics"]);
 
     const Switches = [
@@ -59,6 +78,12 @@ function Switches() {
             key: "useQuickCss",
             title: "Enable Custom CSS",
             description: "Apply your configured QuickCSS"
+        },
+        {
+            key: "optimizedDiscord",
+            title: "Optimized Discord",
+            description: "Removes all animations, including animated profile pictures, server icons, banners, avatar decorations, nameplates, profile effects and status emojis, and turns on reduced motion. This makes Discord feel snappier and use less resources.",
+            restartRequired: true
         },
         {
             value: disableAnalytics,
@@ -166,49 +191,44 @@ function Switches() {
     });
 }
 
-function EquicordSettings() {
-    const donateImage = useMemo(() =>
-        Math.random() > 0.5 ? DEFAULT_DONATE_IMAGE : SHIGGY_DONATE_IMAGE,
-        []
-    );
-
+function StarcordSettings() {
     const user = UserStore?.getCurrentUser();
 
     return (
         <SettingsTab>
-            {(isEquicordDonor(user?.id) || isVencordDonor(user?.id)) ? (
+            {(isStarcordDonor(user?.id) || isVencordDonor(user?.id)) ? (
                 <SpecialCard
                     title="Donations"
                     subtitle="Thank you for donating!"
                     description={
-                        isEquicordDonor(user?.id) && isVencordDonor(user?.id)
-                            ? "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server."
+                        isStarcordDonor(user?.id) && isVencordDonor(user?.id)
+                            ? "All Vencord users can see your Vencord donor badge, and Equicord and Starcord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server."
                             : isVencordDonor(user?.id)
                                 ? "All Vencord users can see your badge! You can manage your perks by messaging @vending.machine."
-                                : "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server."
+                                : "All Equicord and Starcord users can see your badge! You can manage your perks by making a ticket in Equicord's server."
                     }
                     cardImage={VENNIE_DONATOR_IMAGE}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
                     backgroundColor="#ED87A9"
                 >
-                    <DonateButtonComponent donated={true} />
+                    <InviteButtonComponent donated={true} />
                 </SpecialCard>
             ) : (
                 <SpecialCard
-                    title="Support the Project"
-                    description="Please consider supporting the development of Equicord by donating!"
-                    cardImage={donateImage}
-                    backgroundImage={DONOR_BACKGROUND_IMAGE}
-                    backgroundColor="#c3a3ce"
+                    title="Starcord Community"
+                    description="Join the Starcord Discord server to chat, get help and see what's coming next!"
+                    cardImage={STARCORD_IMAGE}
+                    backgroundImage={STAR_BACKGROUND}
+                    backgroundColor="#a8dcf7"
                 >
-                    <DonateButtonComponent />
+                    <InviteButtonComponent />
                 </SpecialCard>
             )}
             {isAnyPluginDev(user?.id) && (
                 <SpecialCard
                     title="Contributions"
                     subtitle="Thank you for contributing!"
-                    description="Since you've contributed to Equicord you now have a cool new badge!"
+                    description="Since you've contributed to Starcord you now have a cool new badge!"
                     cardImage={COZY_CONTRIB_IMAGE}
                     backgroundImage={CONTRIB_BACKGROUND_IMAGE}
                     backgroundColor="#EDCC87"
@@ -271,7 +291,7 @@ function EquicordSettings() {
 
             <Heading className={Margins.top20}>Client Settings</Heading>
             <Paragraph className={Margins.bottom16}>
-                Configure how Equicord behaves and integrates with Discord. These settings affect the Discord client's appearance and behavior.
+                Configure how Starcord behaves and integrates with Discord. These settings affect the Discord client's appearance and behavior.
             </Paragraph>
             <Notice.Info className={Margins.bottom20} style={{ width: "100%" }}>
                 You can customize where this settings section appears in Discord's settings menu by configuring the{" "}
@@ -294,10 +314,10 @@ function EquicordSettings() {
     );
 }
 
-export default wrapTab(EquicordSettings, "Equicord Settings");
+export default wrapTab(StarcordSettings, "Starcord Settings");
 
-export function isEquicordDonor(userId: string): boolean {
-    const donorBadges = BadgeAPI.getEquicordDonorBadges(userId);
+export function isStarcordDonor(userId: string): boolean {
+    const donorBadges = BadgeAPI.getStarcordDonorBadges(userId);
     return GuildMemberStore.getMember(GUILD_ID, userId)?.roles.includes(DONOR_ROLE_ID) || !!donorBadges;
 }
 

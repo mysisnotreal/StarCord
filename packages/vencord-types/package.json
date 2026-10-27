@@ -1,5 +1,5 @@
 {
-    "name": "@equicord/types",
+    "name": "@starcord/types",
     "private": false,
     "version": "1.15.1",
     "description": "",
@@ -9,7 +9,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "Equicord & Vencord Contributors",
+    "author": "Starcord, Equicord & Vencord Contributors",
     "license": "GPL-3.0-or-later",
     "devDependencies": {
         "@types/fs-extra": "^11.0.4",

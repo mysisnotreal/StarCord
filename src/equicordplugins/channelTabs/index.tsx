@@ -10,7 +10,7 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { DataStore } from "@api/index";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { LinkIcon } from "@components/Icons";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, StarcordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { ChannelStore, Menu } from "@webpack/common";
@@ -53,7 +53,7 @@ export default definePlugin({
     name: "ChannelTabs",
     description: "Group your commonly visited channels in tabs, like a browser",
     tags: ["Appearance", "Customisation", "Organisation", "Servers"],
-    authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux, EquicordDevs.DiabeloDEV, EquicordDevs.justjxke, EquicordDevs.keircn],
+    authors: [Devs.TheSun, Devs.TheKodeToad, StarcordDevs.keifufu, Devs.Nickyux, StarcordDevs.DiabeloDEV, StarcordDevs.justjxke, StarcordDevs.keircn],
     dependencies: ["ContextMenuAPI", "ConcatenatedModules"],
     contextMenus: {
         "channel-mention-context": contextMenuPatch,

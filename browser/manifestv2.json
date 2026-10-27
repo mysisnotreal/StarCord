@@ -1,10 +1,9 @@
 {
     "manifest_version": 2,
     "minimum_chrome_version": "91",
-    "name": "Equicord Web",
+    "name": "Starcord Web",
     "description": "The other cutest Discord mod now in your browser",
-    "author": "Equicord",
-    "homepage_url": "https://github.com/Equicord/Equicord",
+    "author": "Starcord",
     "icons": {
         "128": "icon.png"
     },
@@ -32,7 +31,7 @@
                 "*://*.discord.com/*"
             ],
             "js": [
-                "dist/Equicord.js"
+                "dist/Starcord.js"
             ],
             "all_frames": true,
             "world": "MAIN"
@@ -44,12 +43,12 @@
         ]
     },
     "web_accessible_resources": [
-        "dist/Equicord.js",
-        "dist/Equicord.css"
+        "dist/Starcord.js",
+        "dist/Starcord.css"
     ],
     "browser_specific_settings": {
         "gecko": {
-            "id": "firefox@equicord.org",
+            "id": "firefox@starcord",
             "strict_min_version": "128.0",
             "data_collection_permissions": {
                 "required": [

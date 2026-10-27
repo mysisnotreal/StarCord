@@ -1,0 +1,11 @@
+/* Discord sets its own durations on many elements, so these need to win over its rules. */
+*,
+*::before,
+*::after {
+    animation-delay: 0s !important; /* overrides Discord's per-element animation delays */
+    animation-duration: 0.01ms !important; /* overrides Discord's keyframe animations, still fires animationend */
+    animation-iteration-count: 1 !important; /* stops Discord's infinite loading/pulse animations */
+    scroll-behavior: auto !important; /* overrides Discord's smooth scrolling */
+    transition-delay: 0s !important; /* overrides Discord's per-element transition delays */
+    transition-duration: 0s !important; /* overrides Discord's hover and layout transitions */
+}

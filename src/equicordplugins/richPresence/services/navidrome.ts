@@ -90,7 +90,7 @@ async function fetchNowPlaying(signal?: AbortSignal): Promise<NdTrack | null> {
         const token = md5Hex((nd_password ?? "") + salt);
 
         const baseUrl = parsedUrl.href.replace(/\/$/, "");
-        const queryParams = `u=${encodeURIComponent(nd_username)}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc&f=json`;
+        const queryParams = `u=${encodeURIComponent(nd_username)}&t=${token}&s=${salt}&v=1.12.0&c=starcord-rpc&f=json`;
 
         const res = await fetch(`${baseUrl}/rest/getNowPlaying?${queryParams}`, { signal });
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
@@ -241,7 +241,7 @@ async function getActivity(signal?: AbortSignal): Promise<Activity | null> {
         const { nd_username, nd_password } = settings.store;
         const salt = Math.random().toString(36).substring(2, 8);
         const token = md5Hex((nd_password ?? "") + salt);
-        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${encodeURIComponent(track.coverArt)}&u=${encodeURIComponent(nd_username ?? "")}&t=${token}&s=${salt}&v=1.12.0&c=equicord-rpc`;
+        resolvedCoverArtUrl = `${externalBaseUrl}/rest/getCoverArt?id=${encodeURIComponent(track.coverArt)}&u=${encodeURIComponent(nd_username ?? "")}&t=${token}&s=${salt}&v=1.12.0&c=starcord-rpc`;
     } else if (albumArtMode === "lastfm" && track.artist) {
         const trimmedKey = nd_lastfmApiKey?.trim();
         const apiKey = trimmedKey || "feff915bf5987580c9dc354d523dc6b9";

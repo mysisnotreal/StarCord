@@ -10,12 +10,13 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs, StarcordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { ColorPicker } from "@webpack/common";
 
 import fathorse from "./fathorse";
+import { startFeeding } from "./feeding";
 import oneko from "./oneko";
 
 const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.gif";
@@ -110,6 +111,12 @@ const settings = definePluginSettings({
         isValid: (value: number) => value > 0 || "Framerate must be bigger than 0",
         onChange: load
     },
+    feeding: {
+        description: "Show a stack of hay (Fatass Horse) or fish (Oneko) in the bottom right. Hold left click on it to pull out food and feed your buddy. The more it eats the bigger it gets, and it slowly gets smaller if it walks around without eating.",
+        type: OptionType.BOOLEAN,
+        default: true,
+        onChange: load
+    },
     // Oneko Specific
     onekoSection: {
         type: OptionType.COMPONENT,
@@ -194,11 +201,14 @@ const settings = definePluginSettings({
     shake: {
         disabled() { return this.store.buddy !== "fathorse"; },
     }
-});
+}).withPrivateSettings<{ onekoScale?: number; fathorseScale?: number; }>();
 
 let destroyBuddy: (() => void) | undefined;
+let feeding: ReturnType<typeof startFeeding> | undefined;
 
 function unload() {
+    feeding?.destroy();
+    feeding = undefined;
     destroyBuddy?.();
     destroyBuddy = undefined;
     document.getElementById("oneko")?.remove();
@@ -209,6 +219,21 @@ function load() {
     if (!isPluginEnabled("CursorBuddy")) return;
     unload();
 
+    const isOneko = settings.store.buddy === "oneko";
+    if (settings.store.feeding) {
+        feeding = startFeeding({
+            food: isOneko ? "fish" : "hay",
+            buddyId: isOneko ? "oneko" : "fathorse",
+            eatRadius: isOneko ? 64 : settings.store.size * 0.7 + 30,
+            scale: (isOneko ? settings.store.onekoScale : settings.store.fathorseScale) ?? 1,
+            onScaleChange(scale) {
+                if (isOneko) settings.store.onekoScale = scale;
+                else settings.store.fathorseScale = scale;
+            }
+        });
+    }
+    const onFrame = feeding?.onFrame;
+
     switch (settings.store.buddy) {
         case "oneko": {
             destroyBuddy = oneko({
@@ -217,7 +242,8 @@ function load() {
                 image: ONEKO_IMAGE,
                 persistPosition: false,
                 furColor: settings.store.furColor,
-                outlineColor: settings.store.outlineColor
+                outlineColor: settings.store.outlineColor,
+                onFrame
             });
             break;
         }
@@ -229,7 +255,8 @@ function load() {
                 fade: settings.store.fade,
                 freeroam: settings.store.freeroam,
                 shake: settings.store.shake,
-                image: FATASS_HORSE_IMAGE
+                image: FATASS_HORSE_IMAGE,
+                onFrame
             });
         }
     }
@@ -240,7 +267,7 @@ export default definePlugin({
     name: "CursorBuddy",
     description: "Adds a sprite that follows your cursor.",
     tags: ["Appearance", "Customisation", "Fun"],
-    authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid, EquicordDevs.ZcraftElite],
+    authors: [Devs.Ven, Devs.adryd, StarcordDevs.nexpid, StarcordDevs.ZcraftElite],
     searchTerms: ["Oneko", "FatassHorse", "Pet"],
     settings,
     isModified: true,

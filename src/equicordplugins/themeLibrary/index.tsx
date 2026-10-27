@@ -6,7 +6,7 @@
 
 import { ColorPaletteIcon } from "@components/Icons";
 import SettingsPlugin from "@plugins/_core/settings";
-import { EquicordDevs } from "@utils/constants";
+import { StarcordDevs } from "@utils/constants";
 import { removeFromArray } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { SettingsRouter } from "@webpack/common";
@@ -17,17 +17,17 @@ export default definePlugin({
     name: "ThemeLibrary",
     description: "A library of themes for Vencord.",
     tags: ["Appearance", "Customisation"],
-    authors: [EquicordDevs.Fafa],
+    authors: [StarcordDevs.Fafa],
     settings,
     toolboxActions: {
         "Open Theme Library": () => {
-            SettingsRouter.openUserSettings("equicord_theme_library_panel");
+            SettingsRouter.openUserSettings("starcord_theme_library_panel");
         },
     },
 
     start() {
         SettingsPlugin.customEntries.push({
-            key: "equicord_theme_library",
+            key: "starcord_theme_library",
             title: "Theme Library",
             Component: require("./components/ThemeTab").default,
             Icon: ColorPaletteIcon
@@ -35,6 +35,6 @@ export default definePlugin({
     },
 
     stop() {
-        removeFromArray(SettingsPlugin.customEntries, e => e.key === "equicord_theme_library");
+        removeFromArray(SettingsPlugin.customEntries, e => e.key === "starcord_theme_library");
     },
 });

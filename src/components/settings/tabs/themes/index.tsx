@@ -21,6 +21,7 @@ import { getStylusWebStoreUrl } from "@utils/web";
 import { React, Select, showToast, TextInput, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import { SyntheticEvent } from "react";
 
+import { BetterDiscordThemesSection } from "./BetterDiscordThemes";
 import { OnlineThemesSection } from "./OnlineThemes";
 import { QuickActionsSection } from "./QuickActions";
 import { ThemeCard } from "./ThemeCard";
@@ -501,6 +502,16 @@ function ThemesTab() {
                     })}
                 </div>
             )}
+
+            <Divider className={Margins.top20} />
+
+            <BetterDiscordThemesSection
+                installedFileNames={userThemes?.map(t => t.fileName) ?? []}
+                onInstalled={fileName => {
+                    onLocalThemeChange(fileName, true);
+                    refreshLocalThemes();
+                }}
+            />
         </SettingsTab>
     );
 }

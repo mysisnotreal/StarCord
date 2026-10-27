@@ -1,0 +1,11 @@
+.vc-dm-voice-view-icon {
+    display: flex;
+    align-items: center;
+    margin-left: 4px;
+    color: var(--interactive-normal);
+    cursor: pointer;
+}
+
+.vc-dm-voice-view-icon:hover {
+    color: var(--interactive-hover);
+}
